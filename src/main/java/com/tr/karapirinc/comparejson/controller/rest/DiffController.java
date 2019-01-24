@@ -35,8 +35,7 @@ public class DiffController {
     @ResponseBody
     public CompareJsonResponse checkDifference(@PathVariable Long id) {
         log.debug("check difference of id {}", id);
-        CompareJsonResponse resp=new CompareJsonResponse();
-        return resp;
+        return new CompareJsonResponse();
     }
 
 }

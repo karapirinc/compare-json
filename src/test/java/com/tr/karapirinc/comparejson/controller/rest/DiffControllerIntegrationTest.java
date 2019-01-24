@@ -18,7 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -36,12 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs(outputDir = "target/snippets")
 public class DiffControllerIntegrationTest {
 
-    //@Rule
-    //public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
-
     @Autowired
     private MockMvc mvc;
-
 
     @Autowired
     private DiffRepository diffRepository;
@@ -59,7 +57,6 @@ public class DiffControllerIntegrationTest {
     }
 
     //TODO Rest DOC all services
-
     @Test
     public void whenValidInputsEqual_thenReturnEqual() throws Exception {
         final byte[] base64TestData = Base64.getEncoder().encode("TEST String".getBytes());
@@ -97,11 +94,11 @@ public class DiffControllerIntegrationTest {
                 .andExpect(jsonPath("$.length", IsNull.nullValue()));
     }
 
-    //TODO FIXME Assert offsets are wrong
     @Test
     public void whenInputsAreDifferentWithSameSize_thenReturnOffsetsAndLength() throws Exception {
         final byte[] testData = Base64.getEncoder().encode("TEST String".getBytes());
         final byte[] diffTestData = Base64.getEncoder().encode("DESD String".getBytes());
+
         mvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(testData));
         mvc.perform(post("/v1/diff/1/right").contentType(MediaType.APPLICATION_JSON).content(diffTestData));
 
@@ -110,7 +107,8 @@ public class DiffControllerIntegrationTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.result", is(ResultCode.NOT_EQUAL.name())))
                 .andExpect(jsonPath("$.desc", is(ResultCode.NOT_EQUAL.getDesc())))
-                .andExpect(jsonPath("$.diffOffsets", is(0)))
-                .andExpect(jsonPath("$.length", is(4)));
+                .andExpect(jsonPath("$.diffOffsets[0]", is(0)))
+                .andExpect(jsonPath("$.diffOffsets[1]", is(4)))
+                .andExpect(jsonPath("$.length", is(16)));
     }
 }
