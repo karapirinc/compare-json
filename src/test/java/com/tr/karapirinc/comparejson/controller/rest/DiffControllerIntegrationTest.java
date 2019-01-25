@@ -20,14 +20,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -45,14 +46,13 @@ public class DiffControllerIntegrationTest {
     private DiffRepository diffRepository;
 
 
-    @Ignore
     @Test
     public void whenValidInput_thenStoreBase64Text() throws Exception {
         final byte[] base64TestData = Base64.getEncoder().encode("TEST String".getBytes());
         mvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(base64TestData));
 
         List<DiffModel> found = diffRepository.findAll();
-        assertThat(found).extracting(DiffModel::getLeft).containsOnly(base64TestData);
+        assertThat(found).extracting(DiffModel::getLeft).containsOnly(Base64.getDecoder().decode(base64TestData));
 
     }
 
@@ -74,7 +74,7 @@ public class DiffControllerIntegrationTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.result", is(ResultCode.EQUAL.name())))
                 .andExpect(jsonPath("$.desc", is(ResultCode.EQUAL.getDesc())))
-                .andExpect(jsonPath("$.diffOffsets", IsNull.nullValue()))
+                .andExpect(jsonPath("$.diffOffsets", hasSize(0)))
                 .andExpect(jsonPath("$.length", IsNull.nullValue()));
     }
 
@@ -90,7 +90,7 @@ public class DiffControllerIntegrationTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.result", is(ResultCode.NOT_EQUAL_SIZE.name())))
                 .andExpect(jsonPath("$.desc", is(ResultCode.NOT_EQUAL_SIZE.getDesc())))
-                .andExpect(jsonPath("$.diffOffsets", IsNull.nullValue()))
+                .andExpect(jsonPath("$.diffOffsets", hasSize(0)))
                 .andExpect(jsonPath("$.length", IsNull.nullValue()));
     }
 
@@ -108,7 +108,7 @@ public class DiffControllerIntegrationTest {
                 .andExpect(jsonPath("$.result", is(ResultCode.NOT_EQUAL.name())))
                 .andExpect(jsonPath("$.desc", is(ResultCode.NOT_EQUAL.getDesc())))
                 .andExpect(jsonPath("$.diffOffsets[0]", is(0)))
-                .andExpect(jsonPath("$.diffOffsets[1]", is(4)))
-                .andExpect(jsonPath("$.length", is(16)));
+                .andExpect(jsonPath("$.diffOffsets[1]", is(3)))
+                .andExpect(jsonPath("$.length", is(11)));
     }
 }
