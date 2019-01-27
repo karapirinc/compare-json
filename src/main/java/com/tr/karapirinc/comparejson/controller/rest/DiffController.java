@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 
+
 /**
- * TODO multipart form data with octet-stream can be used for bandwith and performance improvement
+ * Exposes RESTful services for comparing Base64 data
+ *
+ * @author Yusuf Ismail Oktay
+ * @since 0.0.1
  */
 @Slf4j
 @RestController()
@@ -22,6 +26,16 @@ public class DiffController {
     @Autowired
     private DiffService diffService;
 
+    /**
+     * Stores Base64 binary data which can be used for comparing with side indicator
+     *
+     * @param id unique id of comparison operation.
+     * @param side Valid side parameter values: left/right {@code DiffSide} indicates side of the comparison.
+     * @param body Base64 JSON byte array data to be compared
+     * @return Result of operation as ERROR or SAVED_SUCCESSFULLY {@code CompareJsonResponse}
+     *
+     * TODO multipart form data with octet-stream can be used for less bandwith usage and performance improvement
+     */
     @PostMapping("/{id}/{side}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -43,6 +57,13 @@ public class DiffController {
         return resp;
     }
 
+    /**
+     * Compares previously saved Base64 binary data.
+     *
+     * @param id Unique ID of previously saved data
+     * @return result of comparison. EQUAL, NOT_EQUAL_SIZE AND NOT_EQUAL. If result NOT_EQUAL response object {@code CompareJsonResponse}
+     * contains offsets of differences and length of the data too.
+     */
     @GetMapping("/{id}")
     @ResponseBody
     public CompareJsonResponse checkDifference(@PathVariable Long id) {
