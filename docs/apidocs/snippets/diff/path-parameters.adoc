@@ -1,8 +1,0 @@
-.+/v1/diff/{id}+
-|===
-|Parameter|Description
-
-|`+id+`
-|Unique identifier of comparision
-
-|===

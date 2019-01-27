@@ -1,5 +1,0 @@
-[source,bash]
-----
-$ echo 'VEVTVCBTdHJpbmc=' | http POST 'http://localhost:8080/v1/diff/1/left' \
-    'Content-Type:application/json;charset=UTF-8'
-----

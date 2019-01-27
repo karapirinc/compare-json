@@ -1,4 +1,0 @@
-[source,options="nowrap"]
-----
-{"result":"SAVED_SUCCESSFULLY","desc":"TEST String","diffOffsets":[],"length":null}
-----

@@ -1,6 +1,0 @@
-[source,bash]
-----
-$ curl 'http://localhost:8080/v1/diff/1/left' -i -X POST \
-    -H 'Content-Type: application/json;charset=UTF-8' \
-    -d 'VEVTVCBTdHJpbmc='
-----

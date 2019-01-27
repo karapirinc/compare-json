@@ -1,36 +1,28 @@
 
-= Compare JSON REST Services
+= Compare JSON REST Service Documentation
 
-This is an example output for a service running at http://localhost:8080:
+These are HTTP request examples for service running at http://localhost:8080:
 
-include::{snippets}/diff/curl-request.adoc[]
+*Saving Base64 data for comparing.*
 
-One showing how to make a request using HTTPie:
+HTTP Request:
+include::{snippets}/storeBase64/http-request.adoc[]
+include::{snippets}/storeBase64/path-parameters.adoc[]
 
-include::{snippets}/diff/httpie-request.adoc[]
+Example HTTP Response
+_( If data saved successfully)_
+include::{snippets}/storeBase64/http-response.adoc[]
+include::{snippets}/storeBase64/response-fields.adoc[]
 
-One showing the HTTP request:
 
+*Comparing Previously SavedBase64 data*
+
+HTTP Request:
 include::{snippets}/diff/http-request.adoc[]
-
-And one showing the response fields:
-
-include::{snippets}/diff/request-fields.adoc[]
-
-One showing the request body:
-
 include::{snippets}/diff/path-parameters.adoc[]
 
-include::{snippets}/diff/request-body.adoc[]
-
-One showing the HTTP response:
-
+Example HTTP Response
+_( If data are equal)_
 include::{snippets}/diff/http-response.adoc[]
-
-And one showing the response body:
-
-include::{snippets}/diff/response-body.adoc[]
-
-And one showing the response fields:
-
 include::{snippets}/diff/response-fields.adoc[]
+
