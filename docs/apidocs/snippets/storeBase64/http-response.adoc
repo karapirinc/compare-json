@@ -1,0 +1,8 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 201 Created
+Content-Length: 83
+Content-Type: application/json;charset=UTF-8
+
+{"result":"SAVED_SUCCESSFULLY","desc":"TEST String","diffOffsets":[],"length":null}
+----

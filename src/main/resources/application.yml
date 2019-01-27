@@ -1,2 +1,2 @@
-server.servlet.context-path: /comparejson
+#server.servlet.context-path: /comparejson
 logging.level.web: DEBUG

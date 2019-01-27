@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"result":"EQUAL","desc":"Texts are equal","diffOffsets":[],"length":null}
+----

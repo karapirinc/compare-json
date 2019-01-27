@@ -1,0 +1,8 @@
+com.tr.karapirinc.comparejson
+com.tr.karapirinc.comparejson.constant
+com.tr.karapirinc.comparejson.controller.rest
+com.tr.karapirinc.comparejson.dto
+com.tr.karapirinc.comparejson.persistence
+com.tr.karapirinc.comparejson.persistence.model
+com.tr.karapirinc.comparejson.service
+com.tr.karapirinc.comparejson.util

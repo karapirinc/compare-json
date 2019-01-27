@@ -1,0 +1,20 @@
+|===
+|Path|Type|Description
+
+|`+result+`
+|`+String+`
+|Compare result code
+
+|`+desc+`
+|`+String+`
+|Compare operation result description
+
+|`+diffOffsets+`
+|`+Array+`
+|Offsets of differences
+
+|`+length+`
+|`+Null+`
+|Length of data
+
+|===

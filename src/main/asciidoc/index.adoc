@@ -1,9 +1,36 @@
+
 = Compare JSON REST Services
 
 This is an example output for a service running at http://localhost:8080:
 
-.request
-include::{snippets}\diff\http-request.adoc[]
+include::{snippets}/diff/curl-request.adoc[]
 
-.response
-include::{snippets}\diff\http-response.adoc[]
+One showing how to make a request using HTTPie:
+
+include::{snippets}/diff/httpie-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/diff/http-request.adoc[]
+
+And one showing the response fields:
+
+include::{snippets}/diff/request-fields.adoc[]
+
+One showing the request body:
+
+include::{snippets}/diff/path-parameters.adoc[]
+
+include::{snippets}/diff/request-body.adoc[]
+
+One showing the HTTP response:
+
+include::{snippets}/diff/http-response.adoc[]
+
+And one showing the response body:
+
+include::{snippets}/diff/response-body.adoc[]
+
+And one showing the response fields:
+
+include::{snippets}/diff/response-fields.adoc[]
