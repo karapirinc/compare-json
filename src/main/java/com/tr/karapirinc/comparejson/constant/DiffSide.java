@@ -8,7 +8,7 @@ import java.util.Arrays;
 public enum DiffSide {
     LEFT("left"), RIGHT("right");
 
-    private String value;
+    private final String value;
 
     DiffSide(String value) {
         this.value = value;

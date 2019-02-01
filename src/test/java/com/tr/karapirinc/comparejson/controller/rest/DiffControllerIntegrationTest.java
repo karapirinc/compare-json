@@ -49,42 +49,43 @@ public class DiffControllerIntegrationTest {
     private DiffRepository diffRepository;
 
     //Spring REST Docs related fields
-    private static FieldDescriptor[] compareJsonResponseFieldsDoc = {fieldWithPath("result").description("Compare result code"),
+    private static final FieldDescriptor[] COMPARE_JSON_RESPONSE_DOC = {fieldWithPath("result").description("Compare result code"),
             fieldWithPath("desc").description("Compare operation result description"),
             fieldWithPath("diffOffsets").description("Offsets of differences"),
             fieldWithPath("length").description("Length of data")};
 
-    private static ParameterDescriptor idPathParamDoc = parameterWithName("id").description("Unique identifier of comparision");
-    private static ParameterDescriptor[] pathParamsDoc = {idPathParamDoc,
+    private static final ParameterDescriptor ID_PATH_PARAM_DOC = parameterWithName("id").description("Unique identifier of comparision");
+
+    private static final ParameterDescriptor[] PATH_PARAMS_DOC = {ID_PATH_PARAM_DOC,
             parameterWithName("side").description("Side of the comparision").attributes(key("constraints").value("Valid values are left or right"))};
 
+    private static final byte[] BASE64_TEST_DATA = Base64.getEncoder().encode("TEST String".getBytes());
 
     @Test
     public void whenValidInput_thenStoreBase64Text() throws Exception {
-        final byte[] base64TestData = Base64.getEncoder().encode("TEST String".getBytes());
 
 
-        mockMvc.perform(post("/v1/diff/{id}/{side}", 1, "left").contentType(MediaType.APPLICATION_JSON).content(base64TestData))
+
+        mockMvc.perform(post("/v1/diff/{id}/{side}", 1, "left").contentType(MediaType.APPLICATION_JSON).content(BASE64_TEST_DATA))
                 .andDo(document("storeBase64",
-                        pathParameters(pathParamsDoc),
-                        responseFields(compareJsonResponseFieldsDoc)));
+                        pathParameters(PATH_PARAMS_DOC),
+                        responseFields(COMPARE_JSON_RESPONSE_DOC)));
 
         List<DiffModel> found = diffRepository.findAll();
-        assertThat(found).extracting(DiffModel::getLeft).containsOnly(Base64.getDecoder().decode(base64TestData));
+        assertThat(found).extracting(DiffModel::getLeft).containsOnly(Base64.getDecoder().decode(BASE64_TEST_DATA));
 
     }
 
     @Test
     public void whenValidInputsEqual_thenReturnEqual() throws Exception {
-        final byte[] base64TestData = Base64.getEncoder().encode("TEST String".getBytes());
         Long testId = 1L;
-        mockMvc.perform(post("/v1/diff/{id}/{side}", testId, "left").contentType(MediaType.APPLICATION_JSON).content(base64TestData));
-        mockMvc.perform(post("/v1/diff/{id}/{side}", testId, "right").contentType(MediaType.APPLICATION_JSON).content(base64TestData));
+        mockMvc.perform(post("/v1/diff/{id}/{side}", testId, "left").contentType(MediaType.APPLICATION_JSON).content(BASE64_TEST_DATA));
+        mockMvc.perform(post("/v1/diff/{id}/{side}", testId, "right").contentType(MediaType.APPLICATION_JSON).content(BASE64_TEST_DATA));
 
         mockMvc.perform(get("/v1/diff/{id}", testId).contentType(MediaType.APPLICATION_JSON)).
                 andDo(document("diff",
-                        pathParameters(idPathParamDoc),
-                        responseFields(compareJsonResponseFieldsDoc)))
+                        pathParameters(ID_PATH_PARAM_DOC),
+                        responseFields(COMPARE_JSON_RESPONSE_DOC)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.result", is(ResultCode.EQUAL.name())))
@@ -95,9 +96,8 @@ public class DiffControllerIntegrationTest {
 
     @Test
     public void whenSizeOfInputsNotSame_thenReturnSizeNotEqual() throws Exception {
-        final byte[] testData = Base64.getEncoder().encode("TEST String".getBytes());
         final byte[] longerTestData = Base64.getEncoder().encode("TEST String Longer".getBytes());
-        mockMvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(testData));
+        mockMvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(BASE64_TEST_DATA));
         mockMvc.perform(post("/v1/diff/1/right").contentType(MediaType.APPLICATION_JSON).content(longerTestData));
 
         mockMvc.perform(get("/v1/diff/1").contentType(MediaType.APPLICATION_JSON))
@@ -111,10 +111,9 @@ public class DiffControllerIntegrationTest {
 
     @Test
     public void whenInputsAreDifferentWithSameSize_thenReturnOffsetsAndLength() throws Exception {
-        final byte[] testData = Base64.getEncoder().encode("TEST String".getBytes());
         final byte[] diffTestData = Base64.getEncoder().encode("DESD String".getBytes());
 
-        mockMvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(testData));
+        mockMvc.perform(post("/v1/diff/1/left").contentType(MediaType.APPLICATION_JSON).content(BASE64_TEST_DATA));
         mockMvc.perform(post("/v1/diff/1/right").contentType(MediaType.APPLICATION_JSON).content(diffTestData));
 
         mockMvc.perform(get("/v1/diff/1").contentType(MediaType.APPLICATION_JSON))

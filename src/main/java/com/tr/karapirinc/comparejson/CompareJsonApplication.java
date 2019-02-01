@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 /*
-TODO write README
+TODO improve README
 TODO seperate integration ve unit tests with spring profilers
 TODO add gradle support
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.tr.karapirinc")
 public class CompareJsonApplication {
 
 	public static void main(String[] args) {

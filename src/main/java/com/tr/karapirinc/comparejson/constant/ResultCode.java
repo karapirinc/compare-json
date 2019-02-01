@@ -10,7 +10,7 @@ public enum ResultCode {
     ERROR("An error occured!"),
     SAVED_SUCCESSFULLY("Saved Successfully");
 
-    private String desc;
+    private final String desc;
 
     ResultCode(String desc) {
         this.desc = desc;
